@@ -23,9 +23,11 @@ Based on the [gptme-agent-template](https://github.com/gptme/gptme-agent-templat
 # From the Claude Code plugin directory
 /plugin install agent-workspace@claude-plugin-directory
 
-# Or install from GitHub
+# Or from GitHub directly
 /plugin install https://github.com/gptme/agent-workspace-plugin
 ```
+
+**Requires**: Python 3.10+ (for task validation hook)
 
 ## Commands
 

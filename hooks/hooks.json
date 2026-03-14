@@ -1,4 +1,5 @@
 {
+  "description": "Validates task file YAML frontmatter on write/edit",
   "hooks": {
     "PostToolUse": [
       {
@@ -6,7 +7,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/validate-task.sh $CLAUDE_FILE_PATH"
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/validate_task.py",
+            "timeout": 10
           }
         ]
       }
