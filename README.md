@@ -15,16 +15,13 @@ Sets up and manages a git-tracked "brain" for AI agents with:
 
 Most AI agent sessions are ephemeral — everything is lost when the conversation ends. This plugin gives Claude Code the infrastructure to maintain persistent state across sessions, learn from mistakes, and build compound knowledge over time.
 
-Based on the [gptme-agent-template](https://github.com/gptme/gptme-agent-template) — the same architecture powering [Bob](https://github.com/TimeToBuildBob), an autonomous AI agent with 1700+ completed sessions.
+Based on the [gptme-agent-template](https://github.com/gptme/gptme-agent-template) — the same architecture powering [Bob](https://github.com/TimeToBuildBob), an autonomous AI agent with 3000+ completed sessions. Includes an autonomous-run skill that teaches Claude Code how to select work, execute, and journal — turning any project into a self-improving agent workspace.
 
 ## Installation
 
 ```bash
-# From the Claude Code plugin directory
-/plugin install agent-workspace@claude-plugin-directory
-
-# Or from GitHub directly
-/plugin install https://github.com/gptme/agent-workspace-plugin
+# Install from GitHub
+/install https://github.com/gptme/agent-workspace-plugin
 ```
 
 **Requires**: Python 3.10+ (for task validation hook)
@@ -41,6 +38,7 @@ Based on the [gptme-agent-template](https://github.com/gptme/gptme-agent-templat
 
 | Skill | Description |
 |-------|-------------|
+| `autonomous-run` | Execute a structured autonomous work session with cascade task selection |
 | `task-management` | Create, update, and query structured task files |
 | `lessons` | Create behavioral lessons that encode reusable patterns |
 
@@ -82,26 +80,28 @@ backlog -> todo -> active -> done
                  cancelled
 ```
 
-## Example Workflow
+## Example Workflows
 
+### Interactive
 ```
 User: Let's start tracking our work on this project
-
-Claude: /agent-workspace:workspace-init
-        [Creates tasks/, journal/, lessons/, knowledge/]
+Claude: /agent-workspace:workspace-init  →  Creates tasks/, journal/, lessons/, knowledge/
 
 User: Create a task for adding user authentication
-
-Claude: [Uses task-management skill to create tasks/add-user-auth.md]
-
-User: Log what we accomplished today
-
-Claude: /agent-workspace:journal auth-research
-        [Creates journal/2026-03-14/auth-research.md]
+Claude: [Uses task-management skill → tasks/add-user-auth.md]
 
 User: I learned that JWT tokens need rotation — save that
+Claude: [Uses lessons skill → lessons/tools/jwt-token-rotation.md]
+```
 
-Claude: [Uses lessons skill to create lessons/tools/jwt-token-rotation.md]
+### Autonomous
+```
+Cron/Scheduled: "Run an autonomous work session"
+Claude: [Uses autonomous-run skill]
+  1. Checks git status, finds no loose ends
+  2. CASCADE: finds tasks/add-user-auth.md in active state
+  3. Implements auth, writes tests, commits
+  4. Updates task state to done, writes journal entry
 ```
 
 ## Architecture

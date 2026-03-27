@@ -1,0 +1,23 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "agent-workspace",
+  "description": "Persistent agent workspace infrastructure — structured tasks, append-only journal, behavioral lessons, and autonomous operation for AI agents.",
+  "owner": {
+    "name": "Superuser Labs",
+    "url": "https://superuserlabs.org"
+  },
+  "plugins": [
+    {
+      "name": "agent-workspace",
+      "description": "Turn Claude Code into a persistent autonomous agent with structured tasks, journal, lessons, and self-improving workflows.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Superuser Labs",
+        "url": "https://superuserlabs.org"
+      },
+      "source": "./",
+      "category": "productivity",
+      "homepage": "https://github.com/gptme/agent-workspace-plugin"
+    }
+  ]
+}

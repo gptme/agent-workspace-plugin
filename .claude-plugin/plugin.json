@@ -1,6 +1,6 @@
 {
   "name": "agent-workspace",
-  "description": "Persistent agent workspace infrastructure — structured tasks, append-only journal, behavioral lessons, and knowledge base for autonomous AI agents.",
+  "description": "Persistent agent workspace infrastructure — structured tasks, append-only journal, behavioral lessons, and autonomous operation for AI agents.",
   "version": "1.0.0",
   "author": {
     "name": "Superuser Labs",
@@ -8,5 +8,29 @@
   },
   "homepage": "https://gptme.org",
   "repository": "https://github.com/gptme/agent-workspace-plugin",
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": [
+    "agent",
+    "autonomous",
+    "workspace",
+    "tasks",
+    "journal",
+    "lessons",
+    "knowledge-base",
+    "persistent-memory",
+    "self-improving"
+  ],
+  "skills": [
+    "skills/task-management/",
+    "skills/lessons/",
+    "skills/autonomous-run/"
+  ],
+  "commands": [
+    "commands/workspace-init.md",
+    "commands/workspace-status.md",
+    "commands/journal.md"
+  ],
+  "hooks": [
+    "hooks/"
+  ]
 }
