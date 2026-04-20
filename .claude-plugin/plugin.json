@@ -19,18 +19,5 @@
     "knowledge-base",
     "persistent-memory",
     "self-improving"
-  ],
-  "skills": [
-    "skills/task-management/",
-    "skills/lessons/",
-    "skills/autonomous-run/"
-  ],
-  "commands": [
-    "commands/workspace-init.md",
-    "commands/workspace-status.md",
-    "commands/journal.md"
-  ],
-  "hooks": [
-    "hooks/"
   ]
 }

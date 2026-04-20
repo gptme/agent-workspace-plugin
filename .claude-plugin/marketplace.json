@@ -1,7 +1,8 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "agent-workspace",
-  "description": "Persistent agent workspace infrastructure — structured tasks, append-only journal, behavioral lessons, and autonomous operation for AI agents.",
+  "metadata": {
+    "description": "Plugin marketplace for turning Claude Code into a persistent agent workspace with tasks, journals, lessons, and knowledge."
+  },
   "owner": {
     "name": "Superuser Labs",
     "url": "https://superuserlabs.org"
