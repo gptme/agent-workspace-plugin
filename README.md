@@ -20,8 +20,18 @@ Based on the [gptme-agent-template](https://github.com/gptme/gptme-agent-templat
 ## Installation
 
 ```bash
-# Install from GitHub
-/install https://github.com/gptme/agent-workspace-plugin
+# Add the marketplace hosted by this repo
+/plugin marketplace add gptme/agent-workspace-plugin
+
+# Install the plugin from that marketplace
+/plugin install agent-workspace@agent-workspace
+```
+
+Equivalent CLI commands:
+
+```bash
+claude plugin marketplace add gptme/agent-workspace-plugin
+claude plugin install agent-workspace@agent-workspace
 ```
 
 **Requires**: Python 3.10+ (for task validation hook)
