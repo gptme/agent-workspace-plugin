@@ -9,7 +9,24 @@ import json
 import sys
 
 
-VALID_STATES = {"backlog", "todo", "active", "waiting", "done", "cancelled", "someday"}
+# Vendored copy of gptodo's canonical states (gptodo.utils.get_canonical_states):
+# the plugin must work without gptodo installed, so it cannot import it.
+# tests/test_validate_task.py compares this set against gptodo when available.
+VALID_STATES = {
+    "backlog",
+    "todo",
+    "active",
+    "ready_for_review",
+    "waiting",
+    "draft",
+    "someday",
+    "done",
+    "cancelled",
+    "expired",
+}
+
+# Deprecated aliases gptodo still reads (maps to the canonical state).
+DEPRECATED_STATES = {"new": "backlog", "paused": "backlog"}
 
 
 def validate_task_frontmatter(content: str) -> str | None:
@@ -48,12 +65,29 @@ def validate_task_frontmatter(content: str) -> str | None:
     if not has_created:
         return "Task file missing required 'created' field in frontmatter"
 
-    if state_value not in VALID_STATES:
+    if state_value not in VALID_STATES and state_value not in DEPRECATED_STATES:
         return (
             f"Invalid task state '{state_value}'. "
             f"Valid states: {', '.join(sorted(VALID_STATES))}"
         )
 
+    return None
+
+
+def state_deprecation_warning(content: str) -> str | None:
+    """Warning (not an error) when the task uses a deprecated state alias."""
+    for line in content.split("\n")[1:]:
+        stripped = line.strip()
+        if stripped == "---":
+            break
+        if stripped.startswith("state:"):
+            state = stripped.split(":", 1)[1].strip()
+            if state in DEPRECATED_STATES:
+                return (
+                    f"Task state '{state}' is deprecated; "
+                    f"use '{DEPRECATED_STATES[state]}'"
+                )
+            break
     return None
 
 
@@ -82,6 +116,8 @@ def main():
         if tool_name == "Write":
             content = tool_input.get("content", "")
             error = validate_task_frontmatter(content)
+            if not error:
+                error = state_deprecation_warning(content)
         elif tool_name == "Edit":
             # For Edit, we can't fully validate from the diff alone
             # Just output a reminder
