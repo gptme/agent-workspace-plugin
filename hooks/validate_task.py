@@ -5,11 +5,21 @@ Called by Claude Code after Write/Edit operations on task files.
 Reads tool input from stdin, validates frontmatter, outputs JSON on stdout.
 """
 
+from __future__ import annotations
+
 import json
 import sys
 
 
 VALID_STATES = {"backlog", "todo", "active", "waiting", "done", "cancelled", "someday"}
+
+
+def _scalar(value: str) -> str:
+    """A frontmatter scalar without a trailing `# comment` or YAML quotes."""
+    value = value.split(" #", 1)[0].strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in "'\"":
+        value = value[1:-1]
+    return value
 
 
 def validate_task_frontmatter(content: str) -> str | None:
@@ -38,7 +48,7 @@ def validate_task_frontmatter(content: str) -> str | None:
     for line in frontmatter.split("\n"):
         stripped = line.strip()
         if stripped.startswith("state:"):
-            state_value = stripped.split(":", 1)[1].strip()
+            state_value = _scalar(stripped.split(":", 1)[1])
         if stripped.startswith("created:"):
             has_created = True
 
@@ -83,17 +93,23 @@ def main():
             content = tool_input.get("content", "")
             error = validate_task_frontmatter(content)
         elif tool_name == "Edit":
-            # For Edit, we can't fully validate from the diff alone
-            # Just output a reminder
-            print(json.dumps({}))
-            sys.exit(0)
+            # PostToolUse runs after the edit, so the file on disk is the result.
+            with open(file_path, encoding="utf-8") as f:
+                error = validate_task_frontmatter(f.read())
         else:
             print(json.dumps({}))
             sys.exit(0)
 
         if error:
+            message = f"Task validation warning: {error}"
+            # systemMessage is shown to the user; additionalContext reaches the
+            # model, which is the one that can fix the file.
             result = {
-                "systemMessage": f"Task validation warning: {error}"
+                "systemMessage": message,
+                "hookSpecificOutput": {
+                    "hookEventName": "PostToolUse",
+                    "additionalContext": message,
+                },
             }
         else:
             result = {}
