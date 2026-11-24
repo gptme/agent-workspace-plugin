@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/validate_task.py",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/validate_task.py\"",
             "timeout": 10
           }
         ]
